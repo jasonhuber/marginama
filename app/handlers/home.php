@@ -7,9 +7,16 @@ if ($user) {
     exit;
 }
 
+$deleted = isset($_GET['deleted']);
+
 $title = 'Marginama — video review, done properly';
 $bodyClass = 'page-home';
 ob_start(); ?>
+<?php if ($deleted): ?>
+  <div class="container" style="padding-top:1.5rem;">
+    <div class="success" style="margin:0;">Your account and all associated data have been permanently deleted.</div>
+  </div>
+<?php endif; ?>
 <section class="hero container">
   <span class="eyebrow"><span class="dot"></span>Video review, done properly</span>
   <h1>Catch the moment, <span class="glow">keep the critique</span>.</h1>

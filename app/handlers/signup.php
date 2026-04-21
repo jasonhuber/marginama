@@ -55,6 +55,9 @@ ob_start(); ?>
         <input type="password" name="password" required minlength="8" autocomplete="new-password">
       </label>
       <button type="submit" class="btn accent large">Create account</button>
+      <p class="muted" style="margin:0;font-size:0.86rem; line-height:1.5;">
+        By creating an account you agree to the <a href="/terms">Terms</a> and <a href="/privacy">Privacy policy</a>.
+      </p>
       <p class="muted" style="margin:0;font-size:0.88rem;">Already have an account? <a href="/signin">Sign in</a>.</p>
     </form>
   </div>

@@ -20,9 +20,8 @@ $__cssPath = __DIR__ . '/../../public_html/assets/app.css';
 $__cssV = is_file($__cssPath) ? filemtime($__cssPath) : 1;
 ?>
 <link rel="icon" href="/assets/favicon.svg?v=<?= (int) $__favV ?>" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/inter-400.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/inter-500.woff2" crossorigin>
 <link rel="stylesheet" href="/assets/app.css?v=<?= (int) $__cssV ?>">
 </head>
 <?php
@@ -44,7 +43,8 @@ if (!str_starts_with($__path, '/admin') && !str_starts_with($__path, '/api/')) {
     <?php if ($user): ?>
       <a href="/video-reviews">Reviews</a>
       <a href="/extension">Extension</a>
-      <a href="/settings/api-tokens">Settings</a>
+      <a href="/settings/api-tokens">Tokens</a>
+      <a href="/settings/account">Account</a>
       <a href="/feedback">Feedback</a>
       <?php if (is_admin($user)): ?>
         <a href="/admin/analytics" style="color:var(--accent);">Analytics</a>
@@ -71,8 +71,13 @@ if (!str_starts_with($__path, '/admin') && !str_starts_with($__path, '/api/')) {
   <div class="inner">
     <div><span class="mono">Marginama</span> · <span class="muted">Time-stamped video critiques.</span></div>
     <div class="links">
-      <a href="/extension">Install extension</a>
-      <?php if ($user): ?><a href="/feedback">Feedback</a><?php endif; ?>
+      <a href="/extension">Extension</a>
+      <?php if ($user): ?>
+        <a href="/feedback">Feedback</a>
+        <a href="/settings/account">Account</a>
+      <?php endif; ?>
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
       <a href="https://github.com/jasonhuber/marginama" target="_blank" rel="noopener">GitHub</a>
       <span class="muted">MIT · <?= (int) date('Y') ?></span>
     </div>

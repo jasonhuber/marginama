@@ -24,6 +24,8 @@ $routes = [
     ['GET',    '#^/$#',                                 'home.php'],
     ['GET',    '#^/extension$#',                        'extension_install.php'],
     ['GET',    '#^/extension\.zip$#',                   'extension_download.php'],
+    ['GET',    '#^/privacy$#',                          'privacy.php'],
+    ['GET',    '#^/terms$#',                            'terms.php'],
     ['GET',    '#^/signup$#',                           'signup.php'],
     ['POST',   '#^/signup$#',                           'signup.php'],
     ['GET',    '#^/signin$#',                           'signin.php'],
@@ -43,6 +45,11 @@ $routes = [
     ['GET',    '#^/settings/api-tokens$#',              'api_tokens.php'],
     ['POST',   '#^/settings/api-tokens$#',              'api_tokens.php'],
     ['POST',   '#^/settings/api-tokens/([A-Z0-9]{26})/delete$#', 'api_tokens.php'],
+
+    ['GET',    '#^/settings/account$#',                 'account.php'],
+    ['POST',   '#^/settings/account$#',                 'account.php'],
+    ['GET',    '#^/settings/account/export$#',          'account.php'],
+    ['POST',   '#^/settings/account/delete$#',          'account.php'],
 
     ['GET',    '#^/feedback$#',                          'feedback.php'],
     ['POST',   '#^/feedback$#',                          'feedback.php'],

@@ -13,11 +13,16 @@ $bodyClass = $bodyClass ?? '';
 <meta name="color-scheme" content="light dark">
 <title><?= e($title) ?> · Marginama</title>
 <meta name="description" content="Marginama captures time-stamped critiques on YouTube, Sybill, and Google Drive videos. Self-hostable, open source.">
-<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<?php
+$__favPath = __DIR__ . '/../../public_html/assets/favicon.svg';
+$__favV = is_file($__favPath) ? filemtime($__favPath) : 1;
+$__cssPath = __DIR__ . '/../../public_html/assets/app.css';
+$__cssV = is_file($__cssPath) ? filemtime($__cssPath) : 1;
+?>
+<link rel="icon" href="/assets/favicon.svg?v=<?= (int) $__favV ?>" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<?php $__cssPath = __DIR__ . '/../../public_html/assets/app.css'; $__cssV = is_file($__cssPath) ? filemtime($__cssPath) : 1; ?>
 <link rel="stylesheet" href="/assets/app.css?v=<?= (int) $__cssV ?>">
 </head>
 <body<?= $bodyClass ? ' class="' . e($bodyClass) . '"' : '' ?>>

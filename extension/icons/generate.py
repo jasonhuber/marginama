@@ -1,67 +1,90 @@
 #!/usr/bin/env python3
 """
-Generate the extension's toolbar icons at 16/48/128 px.
+Generate the Marginama extension's toolbar icons at 16/48/128 px.
 
-Design: Socrates brand blue circle, a white "play" triangle (video), and a
-small speech-bubble circle stamped at the triangle's tip (review / critique).
-Kept simple so it reads at 16px.
+Design: dark rounded-square card (#111114) matching the website brand mark,
+with a cyan (#06b6d4) "§" section-mark — the project's sigil, also used in
+the website header and the extension's shadow-DOM panel.
 
 Run:
-    cd "Evolven Socrates Extension/icons"
+    cd extension/icons
     python3 generate.py
 """
 
-from PIL import Image, ImageDraw, ImageFilter
+from PIL import Image, ImageDraw, ImageFont
+import os
 
-# Socrates brand blue (from public/favicon.svg)
-BRAND = (0, 116, 200, 255)
-WHITE = (255, 255, 255, 255)
-BUBBLE_STROKE = (0, 116, 200, 255)
+# Marginama palette
+BG = (17, 17, 20, 255)        # #111114
+BORDER = (31, 31, 35, 255)    # #1f1f23
+ACCENT = (6, 182, 212, 255)   # #06b6d4
+
+# Character that IS the brand mark. Render the glyph in the heaviest
+# weight available so it remains legible at 16x16.
+MARK = "\u00a7"  # §
+
+# Font fallback order. We want something bold, geometric, and guaranteed
+# to carry the § glyph. macOS ships all of these.
+FONT_CANDIDATES = [
+    "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
+    "/System/Library/Fonts/Supplemental/Arial.ttf",
+    "/System/Library/Fonts/HelveticaNeue.ttc",
+    "/System/Library/Fonts/Helvetica.ttc",
+    "/Library/Fonts/Arial Bold.ttf",
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+]
+
+
+def load_font(pt: int) -> ImageFont.FreeTypeFont:
+    for path in FONT_CANDIDATES:
+        if os.path.isfile(path):
+            try:
+                return ImageFont.truetype(path, pt)
+            except Exception:
+                continue
+    # Last-resort default (bitmap, ugly but won't crash).
+    return ImageFont.load_default()
+
+
+def rounded_rect(draw: ImageDraw.ImageDraw, box, radius, fill, outline=None, width=1):
+    draw.rounded_rectangle(box, radius=radius, fill=fill, outline=outline, width=width)
 
 
 def draw_icon(size: int) -> Image.Image:
-    # Render at 4x and downsample for clean anti-aliased edges.
+    # Render at 4x then downsample for crisp anti-aliased edges.
     scale = 4
     s = size * scale
     img = Image.new("RGBA", (s, s), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
 
-    # Circle background
-    pad = int(s * 0.02)
-    draw.ellipse([pad, pad, s - pad, s - pad], fill=BRAND)
-
-    # Play triangle (centered, slightly left so the bubble sits to the right)
-    cx = s * 0.44
-    cy = s * 0.52
-    tri_size = s * 0.34
-    triangle = [
-        (cx - tri_size * 0.5, cy - tri_size * 0.6),  # top-left
-        (cx - tri_size * 0.5, cy + tri_size * 0.6),  # bottom-left
-        (cx + tri_size * 0.65, cy),                  # right point
-    ]
-    draw.polygon(triangle, fill=WHITE)
-
-    # Speech-bubble circle at the triangle's tip
-    bx = cx + tri_size * 0.65
-    by = cy
-    br = s * 0.16
-    draw.ellipse(
-        [bx - br, by - br, bx + br, by + br],
-        fill=WHITE,
-        outline=BUBBLE_STROKE,
-        width=max(2, int(s * 0.012)),
+    # Card background with a subtle hairline border.
+    pad = max(1, int(s * 0.02))
+    radius = int(s * 0.22)
+    rounded_rect(
+        draw,
+        [pad, pad, s - pad, s - pad],
+        radius=radius,
+        fill=BG,
+        outline=BORDER,
+        width=max(1, int(s * 0.012)),
     )
 
-    # Three dots in the bubble (…) to say "notes"
-    dot_r = max(1, int(s * 0.018))
-    for i, offset in enumerate([-br * 0.38, 0, br * 0.38]):
-        draw.ellipse(
-            [bx + offset - dot_r, by - dot_r,
-             bx + offset + dot_r, by + dot_r],
-            fill=BRAND,
-        )
+    # Pick a glyph size proportional to the card. § is relatively narrow,
+    # so we can push closer to full height than for, say, "M".
+    pt = int(s * 0.72)
+    font = load_font(pt)
 
-    # Downsample for anti-aliasing
+    # Measure + center.
+    bbox = draw.textbbox((0, 0), MARK, font=font)
+    glyph_w = bbox[2] - bbox[0]
+    glyph_h = bbox[3] - bbox[1]
+    # Account for glyph's top-side bearing.
+    x = (s - glyph_w) // 2 - bbox[0]
+    y = (s - glyph_h) // 2 - bbox[1] - int(s * 0.02)
+
+    draw.text((x, y), MARK, font=font, fill=ACCENT)
+
+    # Downsample with LANCZOS for crisp final raster.
     return img.resize((size, size), Image.LANCZOS)
 
 

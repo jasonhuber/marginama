@@ -25,13 +25,6 @@ $cst = db()->prepare(
 $cst->execute([$review['id']]);
 $critiques = $cst->fetchAll();
 
-$providerLabels = [
-    'youtube' => 'YouTube',
-    'sybill'  => 'Sybill',
-    'gdrive'  => 'Google Drive',
-    'other'   => 'Video',
-];
-
 $title = 'Shared review';
 $user = null;
 ob_start(); ?>
@@ -47,7 +40,7 @@ ob_start(); ?>
       <div>
         <h1><?= e($review['video_title'] ?: '(untitled)') ?></h1>
         <div class="sub">
-          <span><?= e($providerLabels[$review['provider']] ?? 'Video') ?></span>
+          <span><?= e(provider_label($review['provider'])) ?></span>
           <span>·</span>
           <span>Reviewed by <?= e($review['reviewer_name'] ?: $review['reviewer_email']) ?></span>
           <span>·</span>

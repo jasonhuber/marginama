@@ -22,13 +22,27 @@ Brave / Chrome / any Chromium browser.
 
 ## Using it
 
-Open any supported video page:
+Open any supported video page. The floating Marginama panel appears in the
+top-right. Supported platforms:
 
-- `https://www.youtube.com/watch?v=…`
-- `https://*.sybill.ai/*`
-- `https://drive.google.com/*` (any file page with an embedded video)
+| Platform           | URL                                                         |
+|--------------------|-------------------------------------------------------------|
+| YouTube            | `youtube.com/watch?v=…`, `youtu.be/ID`, `m.youtube.com`     |
+| Vimeo              | `vimeo.com/ID`, `player.vimeo.com/video/ID`                 |
+| Loom               | `loom.com/share/…`                                          |
+| Wistia             | `wistia.com/medias/ID`, `fast.wistia.net/embed/iframe/ID`   |
+| Sybill             | `*.sybill.ai/*`                                             |
+| Gong               | `*.app.gong.io/*`                                           |
+| Zoom               | `*.zoom.us/rec/*` (cloud recordings)                        |
+| Chorus             | `chorus.ai/*`                                               |
+| Panopto            | `*.panopto.com/*`, `*.panopto.eu/*`                         |
+| Google Drive       | `drive.google.com/*` (any file page with an embedded video) |
+| Riverside          | `riverside.fm/*`                                            |
+| Descript           | `web.descript.com/*`                                        |
+| Twitch VODs        | `twitch.tv/videos/ID`                                       |
+| Microsoft Stream   | `web.microsoftstream.com/*`                                 |
 
-The floating Marginama panel appears in the top-right corner. To add a note:
+To add a note:
 
 1. Click **⟳ Now** to capture the current video timestamp (or press
    **Cmd+Shift+N** / **Ctrl+Shift+N**).

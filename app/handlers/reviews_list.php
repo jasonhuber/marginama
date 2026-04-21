@@ -13,13 +13,6 @@ $stmt = db()->prepare(
 $stmt->execute([$user['id']]);
 $reviews = $stmt->fetchAll();
 
-$providerLabels = [
-    'youtube' => 'YouTube',
-    'sybill'  => 'Sybill',
-    'gdrive'  => 'Google Drive',
-    'other'   => 'Video',
-];
-
 $title = 'Reviews';
 ob_start(); ?>
 <section class="block tight">
@@ -58,7 +51,7 @@ ob_start(); ?>
             <span class="provider-badge" aria-hidden="true"><?= icon('capture') ?></span>
             <div class="meta">
               <h3><span><?= e($r['video_title'] ?: $r['video_url']) ?></span></h3>
-              <div class="sub"><?= e($providerLabels[$r['provider']] ?? 'Video') ?></div>
+              <div class="sub"><?= e(provider_label($r['provider'])) ?></div>
             </div>
             <span class="count-pill"><?= (int) $r['critique_count'] ?> <?= ((int) $r['critique_count']) === 1 ? 'note' : 'notes' ?></span>
             <span class="stamp"><?= e(substr($r['updated_at'], 0, 10)) ?></span>

@@ -28,13 +28,6 @@ $shareUrl = $review['share_token']
     ? app_url() . '/share/video-review/' . $review['share_token']
     : null;
 
-$providerLabels = [
-    'youtube' => 'YouTube',
-    'sybill'  => 'Sybill',
-    'gdrive'  => 'Google Drive',
-    'other'   => 'Video',
-];
-
 $title = $review['video_title'] ?: 'Review';
 ob_start(); ?>
 <section class="block tight">
@@ -46,7 +39,7 @@ ob_start(); ?>
       <div>
         <h1><?= e($review['video_title'] ?: '(untitled)') ?></h1>
         <div class="sub">
-          <span><?= e($providerLabels[$review['provider']] ?? 'Video') ?></span>
+          <span><?= e(provider_label($review['provider'])) ?></span>
           <span>·</span>
           <a href="<?= e($review['video_url']) ?>" target="_blank" rel="noopener">Open video ↗</a>
           <span>·</span>

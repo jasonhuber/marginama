@@ -433,6 +433,21 @@
   const readonlyName = $("#readonlyName");
   const composer = $("#composer");
 
+  // Stop keyboard events that originate inside our panel from reaching the
+  // host page. Without this, typing a space in the note textarea triggers
+  // YouTube's space=play/pause hotkey; arrow keys seek the video; "f"
+  // toggles fullscreen; and so on. We use the bubble phase inside the
+  // shadow root so the event never crosses into the composed-path document
+  // listeners that YouTube (and Drive, Sybill) register.
+  for (const evt of ["keydown", "keypress", "keyup"]) {
+    panel.addEventListener(evt, (e) => {
+      const t = e.target;
+      if (t && typeof t.matches === "function" && t.matches("textarea, input, select, button")) {
+        e.stopPropagation();
+      }
+    });
+  }
+
   let capturedTs = 0;
 
   // All reviews for the current video that the user can see: their own +

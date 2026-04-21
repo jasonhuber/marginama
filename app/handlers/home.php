@@ -7,35 +7,150 @@ if ($user) {
     exit;
 }
 
-$title = 'Marginama';
+$title = 'Marginama — video review, done properly';
+$bodyClass = 'page-home';
 ob_start(); ?>
-<section class="hero">
-  <h1>Time-stamped video critiques, in one place.</h1>
+<section class="hero container">
+  <span class="eyebrow"><span class="dot"></span>Video review, done properly</span>
+  <h1>Catch the moment, keep the critique.</h1>
   <p class="lede">
-    Marginama drops a floating panel onto YouTube, Sybill, and Google Drive videos.
-    Click to capture the current timestamp, type a note, and it saves against your account —
-    searchable, shareable, exportable.
+    Marginama is a Chrome extension and dashboard for sales coaches, content
+    editors, and product teams who review video and need their notes tied to
+    the exact second.
   </p>
-  <p class="cta-row">
-    <a class="btn primary" href="/signup">Create account</a>
-    <a class="btn" href="/signin">Sign in</a>
-    <a class="btn ghost" href="/extension">Install the extension →</a>
-  </p>
+  <div class="hero-ctas">
+    <a class="btn accent large" href="/signup">Get started</a>
+    <a class="btn large" href="/extension">Get the extension</a>
+  </div>
+  <div class="hero-visual" aria-hidden="true"><?= icon('hero-illustration') ?></div>
 </section>
 
-<section class="features">
-  <div class="feature">
-    <h3>Capture</h3>
-    <p>Press <kbd>⌘</kbd>+<kbd>⇧</kbd>+<kbd>N</kbd> on any supported video page. The current
-      timestamp and a note go straight into your review.</p>
+<section class="block" id="features">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow"><span class="dot"></span>Features</span>
+      <h2>Everything the review actually needs.</h2>
+      <p>Capture, seek, share, export. No floor-tile of tabs, no lost timestamps, no SaaS lock-in.</p>
+    </div>
+    <div class="grid-features">
+      <article class="feature">
+        <span class="i"><?= icon('capture') ?></span>
+        <h3>Capture in place</h3>
+        <p>Hit a shortcut while the video is playing. The timestamp saves with your note — no pausing, no copy-paste, no tab-switching.</p>
+      </article>
+      <article class="feature">
+        <span class="i"><?= icon('timeline') ?></span>
+        <h3>Deep-link timestamps</h3>
+        <p>Every note is a seekable link. Click 14:22 on the dashboard and the video jumps there. Reviews stop being a wall of text.</p>
+      </article>
+      <article class="feature">
+        <span class="i"><?= icon('share') ?></span>
+        <h3>Share read-only</h3>
+        <p>Send a revocable link to a colleague, client, or rep. They see your notes and the video. They change nothing.</p>
+      </article>
+      <article class="feature">
+        <span class="i"><?= icon('export') ?></span>
+        <h3>Export as JSON</h3>
+        <p>Your reviews belong to you. One click pulls a full review out as structured JSON. Pipe it into a CRM, an LMS, or your own tooling.</p>
+      </article>
+      <article class="feature">
+        <span class="i"><?= icon('selfhost') ?></span>
+        <h3>Self-host it</h3>
+        <p>One PHP codebase and one MySQL database. Run it on your own infrastructure. Your feedback never leaves your network.</p>
+      </article>
+      <article class="feature">
+        <span class="i"><?= icon('opensource') ?></span>
+        <h3>Open source, MIT</h3>
+        <p>The whole thing is MIT-licensed. Read the code, fork it, audit it, change it. No vendor sitting between you and your team's work.</p>
+      </article>
+    </div>
   </div>
-  <div class="feature">
-    <h3>Review</h3>
-    <p>Every critique links back to the exact second of the video. Click a timestamp to seek.</p>
+</section>
+
+<section class="block" id="how">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow"><span class="dot"></span>How it works</span>
+      <h2>Three steps to a searchable review.</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <h3>Install the extension</h3>
+        <p>Download the extension, extract it, and load it unpacked in Chrome or Brave. Paste an API token once — it authorizes only your account and is hashed at rest on the server.</p>
+      </div>
+      <div class="step">
+        <h3>Open a video, take notes</h3>
+        <p>Visit YouTube, Sybill, or a Google Drive video. A floating panel appears. Press <kbd>⌘</kbd>+<kbd>⇧</kbd>+<kbd>N</kbd> to grab the current timestamp, type your critique, save.</p>
+      </div>
+      <div class="step">
+        <h3>Review on the dashboard</h3>
+        <p>Your notes land at marginama.com, sorted by video and time. Edit, delete, share a read-only link, or export the whole review as JSON.</p>
+      </div>
+    </div>
   </div>
-  <div class="feature">
-    <h3>Share</h3>
-    <p>Generate a read-only link for any review. Anyone with the link sees the notes — no account required.</p>
+</section>
+
+<section class="block" id="trust">
+  <div class="container narrow">
+    <div class="section-header">
+      <span class="eyebrow"><span class="dot"></span>Own your tools</span>
+      <h2>Built for teams that own their tools.</h2>
+    </div>
+    <p class="lede" style="margin:0 auto; text-align:center;">
+      Most feedback tools keep your critiques on their servers and charge you
+      monthly for the privilege. Marginama is the other option — MIT-licensed
+      and self-hostable on a single PHP and MySQL stack. Per-user API tokens
+      are hashed at rest, so the extension authorizes without exposing
+      passwords. Your reviews are yours.
+    </p>
+    <div class="row" style="justify-content:center; margin-top:1.75rem;">
+      <a class="btn" href="https://github.com/jasonhuber/marginama" target="_blank" rel="noopener"><?= icon('opensource', 'i') ?>Read the source</a>
+      <a class="btn ghost" href="/extension.zip" download>Download extension</a>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="faq">
+  <div class="container narrow">
+    <div class="section-header">
+      <span class="eyebrow"><span class="dot"></span>FAQ</span>
+      <h2>Answers to the obvious questions.</h2>
+    </div>
+    <div class="faq">
+      <details>
+        <summary>Which video platforms are supported?</summary>
+        <p>Out of the box, Marginama works on YouTube, Sybill, and Google Drive video. The extension detects the current timestamp directly from the player on those sites. Additional platforms can be added by editing the extension source — it's part of the open-source repository.</p>
+      </details>
+      <details>
+        <summary>How does pricing work?</summary>
+        <p>Marginama is MIT-licensed software. If you self-host, it's free — you pay for your own server and database. Hosted accounts on marginama.com run on a per-seat subscription. No storage tier, no note cap, no trial countdown.</p>
+      </details>
+      <details>
+        <summary>Does Marginama store my video content?</summary>
+        <p>No. Marginama only stores timestamps, your written notes, and metadata about the video page. The video itself stays on YouTube, Sybill, or Google Drive. Nothing is re-hosted, re-encoded, or downloaded.</p>
+      </details>
+      <details>
+        <summary>How do I install and set it up?</summary>
+        <p>Create an account, generate an API token from your dashboard, and load the extension unpacked in Chrome or Brave. Paste the token into the extension once. From then on, open any supported video and the capture panel is there.</p>
+      </details>
+      <details>
+        <summary>Can my team share critiques with each other?</summary>
+        <p>Yes. Every review can be published as a read-only share link. Anyone with the link can read the notes and click through to timestamps. Links are revocable at any time, so a project that ends stays ended.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="container narrow">
+    <div class="cta-strip">
+      <h2>Stop scrubbing. Start reviewing.</h2>
+      <p>Install the extension, point it at your next recording, and watch your notes line up with the tape.</p>
+      <div class="row" style="justify-content:center;">
+        <a class="btn accent large" href="/signup">Get started</a>
+        <a class="btn large" href="/extension">Install the extension</a>
+      </div>
+    </div>
   </div>
 </section>
 <?php $content = ob_get_clean();

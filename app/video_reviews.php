@@ -70,3 +70,23 @@ function deep_link_at_time(string $canonicalUrl, string $provider, int $timestam
 function e(?string $s): string {
     return htmlspecialchars((string) $s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
+
+/**
+ * Inline an SVG asset from app/views/icons/ so it inherits currentColor
+ * from CSS. Returns raw SVG (caller should NOT escape).
+ *
+ * $name is the part between "icon-" and ".svg" (e.g. "capture"), or the
+ * literal basename for special assets like "hero-illustration".
+ */
+function icon(string $name, string $class = ''): string {
+    $dir = __DIR__ . '/views/icons/';
+    $path = is_file($dir . $name . '.svg')
+        ? $dir . $name . '.svg'
+        : $dir . 'icon-' . $name . '.svg';
+    if (!is_file($path)) return '';
+    $svg = file_get_contents($path) ?: '';
+    if ($class !== '') {
+        $svg = preg_replace('/<svg\b/', '<svg class="' . e($class) . '"', $svg, 1);
+    }
+    return $svg;
+}

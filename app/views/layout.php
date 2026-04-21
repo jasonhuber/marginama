@@ -4,38 +4,59 @@
 /** @var string $content */
 /** @var ?array $user */
 $user = $user ?? null;
+$bodyClass = $bodyClass ?? '';
 ?><!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
 <title><?= e($title) ?> · Marginama</title>
+<meta name="description" content="Marginama captures time-stamped critiques on YouTube, Sybill, and Google Drive videos. Self-hostable, open source.">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/app.css">
 </head>
-<body>
+<body<?= $bodyClass ? ' class="' . e($bodyClass) . '"' : '' ?>>
 <header class="site">
-  <a class="brand" href="<?= $user ? '/video-reviews' : '/' ?>">Marginama</a>
-  <nav>
-  <?php if ($user): ?>
-    <a href="/video-reviews">Video reviews</a>
-    <a href="/extension">Extension</a>
-    <a href="/settings/api-tokens">Settings</a>
-    <form method="post" action="/signout">
-      <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-      <button type="submit">Sign out</button>
-    </form>
-  <?php else: ?>
-    <a href="/extension">Extension</a>
-    <a href="/signin">Sign in</a>
-    <a href="/signup">Sign up</a>
-  <?php endif; ?>
-  </nav>
+  <div class="bar">
+    <a class="brand" href="<?= $user ? '/video-reviews' : '/' ?>" aria-label="Marginama">
+      <span class="mark" aria-hidden="true">M</span>
+      <span>Marginama</span>
+    </a>
+    <nav aria-label="Primary">
+    <?php if ($user): ?>
+      <a href="/video-reviews">Reviews</a>
+      <a href="/extension">Extension</a>
+      <a href="/settings/api-tokens">Settings</a>
+      <form method="post" action="/signout">
+        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+        <button type="submit" class="btn ghost sm">Sign out</button>
+      </form>
+    <?php else: ?>
+      <a href="/extension">Extension</a>
+      <a href="/#features">Features</a>
+      <a href="/#faq">FAQ</a>
+      <a href="/signin">Sign in</a>
+      <a class="btn accent sm" href="/signup" style="margin-left:0.5rem;">Get started</a>
+    <?php endif; ?>
+    </nav>
+  </div>
 </header>
 <main>
 <?= $content ?>
 </main>
 <footer class="site">
-  <span class="muted">Marginama · <a href="https://github.com/jasonhuber/marginama" target="_blank" rel="noopener">source on GitHub</a></span>
+  <div class="inner">
+    <div><span class="mono">Marginama</span> · <span class="muted">Time-stamped video critiques.</span></div>
+    <div class="links">
+      <a href="/extension">Install extension</a>
+      <a href="https://github.com/jasonhuber/marginama" target="_blank" rel="noopener">GitHub</a>
+      <span class="muted">MIT · <?= (int) date('Y') ?></span>
+    </div>
+  </div>
 </footer>
 </body>
 </html>

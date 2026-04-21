@@ -7,7 +7,6 @@ $user = require_session();
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
-// Delete action: /settings/api-tokens/{id}/delete
 if ($method === 'POST' && preg_match('#^/settings/api-tokens/([A-Z0-9]{26})/delete/?$#', $path, $m)) {
     require_csrf();
     $stmt = db()->prepare('DELETE FROM api_tokens WHERE id = ? AND user_id = ?');
@@ -44,55 +43,68 @@ $tokens = $stmt->fetchAll();
 
 $title = 'API tokens';
 ob_start(); ?>
-<h1>API tokens</h1>
-<p class="muted">
-  The Marginama Chrome extension authenticates with a bearer token. Create one here
-  and paste it into the extension's Options page. Tokens are shown only once.
-</p>
-<div class="card callout">
-  <div class="row">
-    <span class="grow">
-      <strong>Don't have the extension yet?</strong>
-      <span class="muted"> Download and load it as unpacked.</span>
-    </span>
-    <a class="btn" href="/extension">Install guide</a>
-    <a class="btn primary" href="/extension.zip" download>Download .zip</a>
-  </div>
-</div>
-<?php if ($error): ?><div class="error"><?= e($error) ?></div><?php endif; ?>
-<?php if ($newTokenPlain): ?>
-  <div class="success">
-    <strong>New token created.</strong> Copy it now — it won't be shown again.
-    <div class="mono card" style="margin-top:0.5rem; word-break:break-all;"><?= e($newTokenPlain) ?></div>
-  </div>
-<?php endif; ?>
+<section class="block tight">
+  <div class="container narrow">
+    <div class="page-head">
+      <div>
+        <h1>API tokens</h1>
+        <p class="muted">Tokens authorize the Marginama Chrome extension. Each one is hashed at rest and shown only once at creation.</p>
+      </div>
+    </div>
 
-<form class="row" method="post" action="/settings/api-tokens">
-  <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-  <input class="grow" type="text" name="name" placeholder="Token name (e.g. &quot;Chrome — laptop&quot;)" required maxlength="255">
-  <button type="submit" class="primary">Create token</button>
-</form>
+    <?php if ($error): ?><div class="error" style="margin-bottom:1rem;"><?= e($error) ?></div><?php endif; ?>
 
-<?php if ($tokens): ?>
-<h2>Active tokens</h2>
-<table>
-  <thead><tr><th>Name</th><th>Last used</th><th>Created</th><th></th></tr></thead>
-  <tbody>
-  <?php foreach ($tokens as $t): ?>
-    <tr>
-      <td><?= e($t['name']) ?></td>
-      <td class="muted"><?= e($t['last_used_at'] ?: '—') ?></td>
-      <td class="muted"><?= e($t['created_at']) ?></td>
-      <td>
-        <form method="post" action="/settings/api-tokens/<?= e($t['id']) ?>/delete" onsubmit="return confirm('Revoke this token?')">
-          <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-          <button type="submit" class="danger">Revoke</button>
-        </form>
-      </td>
-    </tr>
-  <?php endforeach; ?>
-  </tbody>
-</table>
-<?php endif; ?>
+    <?php if ($newTokenPlain): ?>
+      <div class="card callout" style="margin-bottom:1.5rem;">
+        <h3 style="margin:0 0 0.35rem;">New token created</h3>
+        <p class="muted" style="margin:0 0 0.75rem;">Copy it now — it won't be shown again.</p>
+        <div class="mono card" style="margin:0;padding:0.7rem 0.85rem;word-break:break-all;background:var(--bg-0);"><?= e($newTokenPlain) ?></div>
+      </div>
+    <?php endif; ?>
+
+    <div class="card callout" style="margin-bottom:1.5rem;">
+      <div class="row">
+        <span class="i" style="color:var(--accent-ink);"><?= icon('export') ?></span>
+        <span class="grow">
+          <strong style="color:var(--accent-ink);">Don't have the extension yet?</strong>
+          <span class="muted"> Download and load it as unpacked.</span>
+        </span>
+        <a class="btn sm" href="/extension">Install guide</a>
+        <a class="btn accent sm" href="/extension.zip" download>Download <span class="mono">.zip</span></a>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:1.5rem;">
+      <h3 style="margin:0 0 0.75rem;">Create a token</h3>
+      <form class="row" method="post" action="/settings/api-tokens">
+        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+        <input class="grow" type="text" name="name" placeholder='Token name (e.g. "Chrome — laptop")' required maxlength="255">
+        <button type="submit" class="btn accent">Create token</button>
+      </form>
+    </div>
+
+    <?php if ($tokens): ?>
+      <h2 style="font-size:1.1rem; margin:1rem 0 0.75rem;">Active tokens</h2>
+      <div class="reviews-list">
+        <?php foreach ($tokens as $t): ?>
+          <div class="review-card" style="grid-template-columns:auto 1fr auto;">
+            <span class="provider-badge" aria-hidden="true" style="color:var(--accent);"><?= icon('secure') ?></span>
+            <div class="meta">
+              <h3><?= e($t['name']) ?></h3>
+              <div class="sub">
+                Last used <?= $t['last_used_at'] ? e($t['last_used_at']) : '<span class="muted">never</span>' ?>
+                · Created <?= e($t['created_at']) ?>
+              </div>
+            </div>
+            <form method="post" action="/settings/api-tokens/<?= e($t['id']) ?>/delete" onsubmit="return confirm('Revoke this token?')">
+              <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+              <button type="submit" class="btn danger sm">Revoke</button>
+            </form>
+          </div>
+        <?php endforeach; ?>
+      </div>
+    <?php endif; ?>
+  </div>
+</section>
 <?php $content = ob_get_clean();
 require __DIR__ . '/../views/layout.php';

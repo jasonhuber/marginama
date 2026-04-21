@@ -18,12 +18,14 @@ $user = $user ?? null;
   <nav>
   <?php if ($user): ?>
     <a href="/video-reviews">Video reviews</a>
+    <a href="/extension">Extension</a>
     <a href="/settings/api-tokens">Settings</a>
     <form method="post" action="/signout">
       <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
       <button type="submit">Sign out</button>
     </form>
   <?php else: ?>
+    <a href="/extension">Extension</a>
     <a href="/signin">Sign in</a>
     <a href="/signup">Sign up</a>
   <?php endif; ?>
@@ -32,5 +34,8 @@ $user = $user ?? null;
 <main>
 <?= $content ?>
 </main>
+<footer class="site">
+  <span class="muted">Marginama · <a href="https://github.com/jasonhuber/marginama" target="_blank" rel="noopener">source on GitHub</a></span>
+</footer>
 </body>
 </html>

@@ -17,11 +17,18 @@ $title = 'Video reviews';
 ob_start(); ?>
 <h1>Video reviews</h1>
 <?php if (!$reviews): ?>
-  <p class="muted">
-    No reviews yet. Install the Marginama Chrome extension, open a YouTube /
-    Sybill / Google Drive video, and add your first note. It will appear here.
-  </p>
-  <p><a href="/settings/api-tokens">Get an API token for the extension →</a></p>
+  <div class="card empty">
+    <h2 style="margin-top:0;">No reviews yet</h2>
+    <p class="muted">
+      Install the Marginama extension, open a YouTube / Sybill / Google Drive
+      video, press <kbd>⌘</kbd>+<kbd>⇧</kbd>+<kbd>N</kbd>, type a note — it
+      shows up here.
+    </p>
+    <p class="row">
+      <a class="btn primary" href="/extension">Install the extension</a>
+      <a class="btn" href="/settings/api-tokens">Mint an API token</a>
+    </p>
+  </div>
 <?php else: ?>
   <table>
     <thead>

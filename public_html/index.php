@@ -21,6 +21,8 @@ if ($method === 'OPTIONS' && str_starts_with($path, '/api/')) {
 // The first capture group becomes $params[0], etc.
 $routes = [
     ['GET',    '#^/$#',                                 'home.php'],
+    ['GET',    '#^/extension$#',                        'extension_install.php'],
+    ['GET',    '#^/extension\.zip$#',                   'extension_download.php'],
     ['GET',    '#^/signup$#',                           'signup.php'],
     ['POST',   '#^/signup$#',                           'signup.php'],
     ['GET',    '#^/signin$#',                           'signin.php'],

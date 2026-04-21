@@ -49,6 +49,16 @@ ob_start(); ?>
   The Marginama Chrome extension authenticates with a bearer token. Create one here
   and paste it into the extension's Options page. Tokens are shown only once.
 </p>
+<div class="card callout">
+  <div class="row">
+    <span class="grow">
+      <strong>Don't have the extension yet?</strong>
+      <span class="muted"> Download and load it as unpacked.</span>
+    </span>
+    <a class="btn" href="/extension">Install guide</a>
+    <a class="btn primary" href="/extension.zip" download>Download .zip</a>
+  </div>
+</div>
 <?php if ($error): ?><div class="error"><?= e($error) ?></div><?php endif; ?>
 <?php if ($newTokenPlain): ?>
   <div class="success">

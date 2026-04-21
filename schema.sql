@@ -47,6 +47,24 @@ CREATE TABLE IF NOT EXISTS video_critiques (
   INDEX idx_crit_review_ts (review_id, timestamp_sec)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS events (
+  id         CHAR(26)      NOT NULL PRIMARY KEY,
+  user_id    CHAR(26)      DEFAULT NULL,
+  type       VARCHAR(64)   NOT NULL,
+  path       VARCHAR(512)  DEFAULT NULL,
+  meta       TEXT          DEFAULT NULL,
+  ip_trunc   VARCHAR(64)   DEFAULT NULL,
+  ua         VARCHAR(500)  DEFAULT NULL,
+  session_h  CHAR(16)      DEFAULT NULL,
+  referer    VARCHAR(1024) DEFAULT NULL,
+  created_at DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_ev_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
+  INDEX idx_ev_created (created_at),
+  INDEX idx_ev_type (type),
+  INDEX idx_ev_user_time (user_id, created_at),
+  INDEX idx_ev_session (session_h)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS suggestions (
   id         CHAR(26)      NOT NULL PRIMARY KEY,
   user_id    CHAR(26)      DEFAULT NULL,

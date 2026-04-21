@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../app/auth.php';
 require_once __DIR__ . '/../app/video_reviews.php';
+require_once __DIR__ . '/../app/analytics.php';
 
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 $path   = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
@@ -48,6 +49,7 @@ $routes = [
 
     ['GET',    '#^/admin/suggestions$#',                 'admin_suggestions.php'],
     ['POST',   '#^/admin/suggestions/([A-Z0-9]{26})/status$#', 'admin_suggestions.php'],
+    ['GET',    '#^/admin/analytics$#',                   'admin_analytics.php'],
 
     // Extension API (Bearer authed, returns JSON, CORS).
     ['GET',    '#^/api/v1/video-reviews$#',                               'api_v1_reviews.php'],

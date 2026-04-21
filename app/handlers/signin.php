@@ -14,6 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $row = $stmt->fetch();
     if ($row && password_verify($pw, $row['password_hash'])) {
         sign_in_user($row['id']);
+        track_event('auth.signin', null, [], $row['id']);
         header('Location: /video-reviews');
         exit;
     }

@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             );
             $stmt->execute([$id, strtolower($email), password_hash($pw, PASSWORD_BCRYPT), $name ?: null]);
             sign_in_user($id);
+            track_event('auth.signup', null, [], $id);
             header('Location: /video-reviews');
             exit;
         } catch (PDOException $e) {

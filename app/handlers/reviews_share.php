@@ -18,10 +18,12 @@ if (!$check->fetch()) {
 if ($action === 'revoke') {
     $stmt = db()->prepare('UPDATE video_reviews SET share_token = NULL WHERE id = ? AND user_id = ?');
     $stmt->execute([$id, $user['id']]);
+    track_event('share.revoke', null, ['reviewId' => $id], $user['id']);
 } else {
     $token = bin2hex(random_bytes(20));
     $stmt = db()->prepare('UPDATE video_reviews SET share_token = ? WHERE id = ? AND user_id = ?');
     $stmt->execute([$token, $id, $user['id']]);
+    track_event('share.create', null, ['reviewId' => $id], $user['id']);
 }
 
 header('Location: /video-reviews/' . $id);

@@ -96,6 +96,8 @@ if ($method === 'POST') {
         api_error(500, 'Could not save critique');
     }
 
+    track_event('critique.create', null, ['reviewId' => $reviewId, 'provider' => $provider], $userId);
+
     $rev = $pdo->prepare('SELECT id, video_url, video_title, provider FROM video_reviews WHERE id = ?');
     $rev->execute([$reviewId]);
     $review = $rev->fetch();

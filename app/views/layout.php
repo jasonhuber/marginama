@@ -25,6 +25,14 @@ $__cssV = is_file($__cssPath) ? filemtime($__cssPath) : 1;
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/app.css?v=<?= (int) $__cssV ?>">
 </head>
+<?php
+// Page-view analytics. Only real HTML pages (through layout) count — API
+// endpoints and asset requests never hit this. Admin browsing is skipped.
+$__path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+if (!str_starts_with($__path, '/admin') && !str_starts_with($__path, '/api/')) {
+    track_event('page_view', $__path);
+}
+?>
 <body<?= $bodyClass ? ' class="' . e($bodyClass) . '"' : '' ?>>
 <header class="site">
   <div class="bar">
@@ -39,7 +47,8 @@ $__cssV = is_file($__cssPath) ? filemtime($__cssPath) : 1;
       <a href="/settings/api-tokens">Settings</a>
       <a href="/feedback">Feedback</a>
       <?php if (is_admin($user)): ?>
-        <a href="/admin/suggestions" style="color:var(--accent);">Admin</a>
+        <a href="/admin/analytics" style="color:var(--accent);">Analytics</a>
+        <a href="/admin/suggestions" style="color:var(--accent);">Suggestions</a>
       <?php endif; ?>
       <form method="post" action="/signout">
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">

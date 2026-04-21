@@ -30,6 +30,7 @@ if ($method === 'POST') {
             'INSERT INTO api_tokens (id, user_id, name, token_hash) VALUES (?, ?, ?, ?)'
         );
         $stmt->execute([$id, $user['id'], $name, hash_api_token($plain)]);
+        track_event('token.create', null, ['name' => $name], $user['id']);
         $newTokenPlain = $plain;
     }
 }

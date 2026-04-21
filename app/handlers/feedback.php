@@ -27,6 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              VALUES (?, ?, ?, ?, ?, ?)'
         )->execute([$id, $user['id'], $kind, $body, $pageUrl, $ua]);
         send_suggestion_email($id, $user, $kind, $body);
+        track_event('feedback.submit', null, ['kind' => $kind], $user['id']);
         $success = true;
         $body = '';
         $kind = 'other';

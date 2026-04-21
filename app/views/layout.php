@@ -24,7 +24,7 @@ $bodyClass = $bodyClass ?? '';
 <header class="site">
   <div class="bar">
     <a class="brand" href="<?= $user ? '/video-reviews' : '/' ?>" aria-label="Marginama">
-      <span class="mark" aria-hidden="true">M</span>
+      <span class="mark" aria-hidden="true">§</span>
       <span>Marginama</span>
     </a>
     <nav aria-label="Primary">

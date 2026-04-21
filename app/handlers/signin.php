@@ -40,11 +40,15 @@ ob_start(); ?>
     </form>
   </div>
   <aside class="auth-aside">
-    <div class="panel">
+    <div class="panel-card">
       <span class="eyebrow" style="margin-bottom:1rem;"><span class="dot"></span>What's inside</span>
       <h3>Your timestamps, your reviews, your exports.</h3>
       <p>Open a review, click a timestamp, jump to the second. Share a read-only link. Export as JSON. Revoke access any time.</p>
-      <div class="mini-illo"><?= icon('hero-illustration') ?></div>
+      <div class="review-list" style="margin-top:1rem;">
+        <div class="review-row"><span class="ts-mock">00:14:22</span><span class="review-note">Opening framing is too buried.</span><span class="tag">YouTube</span></div>
+        <div class="review-row"><span class="ts-mock">00:47:02</span><span class="review-note">Demo skipped auth — walk through it.</span><span class="tag">Drive</span></div>
+        <div class="review-row"><span class="ts-mock">01:02:11</span><span class="review-note">Great close. Confirm next step.</span><span class="tag">YouTube</span></div>
+      </div>
     </div>
   </aside>
 </div>

@@ -12,7 +12,7 @@ $bodyClass = 'page-home';
 ob_start(); ?>
 <section class="hero container">
   <span class="eyebrow"><span class="dot"></span>Video review, done properly</span>
-  <h1>Catch the moment, keep the critique.</h1>
+  <h1>Catch the moment, <span class="glow">keep the critique</span>.</h1>
   <p class="lede">
     Marginama is a Chrome extension and dashboard for sales coaches, content
     editors, and product teams who review video and need their notes tied to
@@ -22,7 +22,66 @@ ob_start(); ?>
     <a class="btn accent large" href="/signup">Get started</a>
     <a class="btn large" href="/extension">Get the extension</a>
   </div>
-  <div class="hero-visual" aria-hidden="true"><?= icon('hero-illustration') ?></div>
+
+  <div class="mock-wrap" aria-hidden="true">
+    <div class="browser">
+      <div class="browser-bar">
+        <span class="tl-dots"><span></span><span></span><span></span></span>
+        <span class="url-bar"><span class="lock"></span>marginama.com/video-reviews</span>
+      </div>
+      <div class="app">
+        <aside class="sidebar">
+          <div class="side-label">Library</div>
+          <div class="side-item active"><span class="sq"></span>Reviews</div>
+          <div class="side-item"><span class="sq"></span>Shared</div>
+          <div class="side-item"><span class="sq"></span>Archive</div>
+          <div class="side-divider"></div>
+          <div class="side-label">Settings</div>
+          <div class="side-item"><span class="sq"></span>API tokens</div>
+          <div class="side-item"><span class="sq"></span>Extension</div>
+        </aside>
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Reviews</div>
+              <div class="panel-sub">38 items · updated just now</div>
+            </div>
+            <div class="panel-meta">
+              <span class="chip ok"><span class="d"></span>extension live</span>
+              <span class="chip">MIT · v0.2</span>
+            </div>
+          </div>
+          <div class="review-list">
+            <div class="review-row">
+              <span class="ts-mock">00:14:22</span>
+              <span class="review-note">Opening framing: pitch is too buried. <span class="muted">Move value prop above the setup.</span></span>
+              <span class="tag">YouTube</span>
+            </div>
+            <div class="review-row">
+              <span class="ts-mock">00:22:08</span>
+              <span class="review-note">Rep paused 3s before the pricing reveal. <span class="muted">Rehearse the transition.</span></span>
+              <span class="tag">Sybill</span>
+            </div>
+            <div class="review-row">
+              <span class="ts-mock">00:31:45</span>
+              <span class="review-note">Good open-ended question. <span class="muted">This is the discovery moment.</span></span>
+              <span class="tag">Sybill</span>
+            </div>
+            <div class="review-row">
+              <span class="ts-mock">00:47:02</span>
+              <span class="review-note">Demo skipped auth. <span class="muted">Walk through it for enterprise buyers next time.</span></span>
+              <span class="tag">Drive</span>
+            </div>
+            <div class="review-row">
+              <span class="ts-mock">01:02:11</span>
+              <span class="review-note">Great close. <span class="muted">Confirm next step was agreed on.</span></span>
+              <span class="tag">YouTube</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <section class="block" id="features">

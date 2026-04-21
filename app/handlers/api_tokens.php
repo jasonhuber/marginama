@@ -64,9 +64,9 @@ ob_start(); ?>
 
     <div class="card callout" style="margin-bottom:1.5rem;">
       <div class="row">
-        <span class="i" style="color:var(--accent-ink);"><?= icon('export') ?></span>
+        <span class="i" style="color:var(--accent);"><?= icon('export') ?></span>
         <span class="grow">
-          <strong style="color:var(--accent-ink);">Don't have the extension yet?</strong>
+          <strong style="color:var(--fg-0);">Don't have the extension yet?</strong>
           <span class="muted"> Download and load it as unpacked.</span>
         </span>
         <a class="btn sm" href="/extension">Install guide</a>

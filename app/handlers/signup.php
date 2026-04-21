@@ -58,11 +58,15 @@ ob_start(); ?>
     </form>
   </div>
   <aside class="auth-aside">
-    <div class="panel">
+    <div class="panel-card">
       <span class="eyebrow" style="margin-bottom:1rem;"><span class="dot"></span>What you get</span>
       <h3>Time-stamped notes, one click away.</h3>
       <p>The extension drops a floating panel onto YouTube, Sybill, and Google Drive video pages. Press the shortcut, type the note, move on.</p>
-      <div class="mini-illo"><?= icon('hero-illustration') ?></div>
+      <div class="review-list" style="margin-top:1rem;">
+        <div class="review-row"><span class="ts-mock">00:14:22</span><span class="review-note">Opening framing is too buried.</span><span class="tag">YouTube</span></div>
+        <div class="review-row"><span class="ts-mock">00:22:08</span><span class="review-note">Paused 3s before pricing reveal.</span><span class="tag">Sybill</span></div>
+        <div class="review-row"><span class="ts-mock">00:31:45</span><span class="review-note">Great open-ended discovery.</span><span class="tag">Drive</span></div>
+      </div>
     </div>
   </aside>
 </div>

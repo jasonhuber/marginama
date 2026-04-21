@@ -37,7 +37,7 @@ ob_start(); ?>
 
     <?php if (!$reviews): ?>
       <div class="card empty">
-        <span class="i" style="width:56px;height:56px;border-radius:var(--r-lg);background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent-soft-border);margin-bottom:1rem;display:inline-flex;align-items:center;justify-content:center;">
+        <span class="i" style="width:56px;height:56px;border-radius:var(--r-lg);background:var(--card-2);color:var(--accent);border:1px solid var(--accent-line);margin-bottom:1rem;display:inline-flex;align-items:center;justify-content:center;">
           <?= icon('capture') ?>
         </span>
         <h2>No reviews yet</h2>

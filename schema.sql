@@ -46,3 +46,17 @@ CREATE TABLE IF NOT EXISTS video_critiques (
   CONSTRAINT fk_crit_review FOREIGN KEY (review_id) REFERENCES video_reviews(id) ON DELETE CASCADE,
   INDEX idx_crit_review_ts (review_id, timestamp_sec)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS suggestions (
+  id         CHAR(26)      NOT NULL PRIMARY KEY,
+  user_id    CHAR(26)      DEFAULT NULL,
+  kind       VARCHAR(32)   NOT NULL DEFAULT 'other',
+  body       TEXT          NOT NULL,
+  page_url   VARCHAR(2048) DEFAULT NULL,
+  user_agent VARCHAR(500)  DEFAULT NULL,
+  status     VARCHAR(24)   NOT NULL DEFAULT 'new',
+  created_at DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_sugg_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
+  INDEX idx_sugg_created (created_at),
+  INDEX idx_sugg_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

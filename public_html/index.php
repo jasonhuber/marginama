@@ -43,6 +43,12 @@ $routes = [
     ['POST',   '#^/settings/api-tokens$#',              'api_tokens.php'],
     ['POST',   '#^/settings/api-tokens/([A-Z0-9]{26})/delete$#', 'api_tokens.php'],
 
+    ['GET',    '#^/feedback$#',                          'feedback.php'],
+    ['POST',   '#^/feedback$#',                          'feedback.php'],
+
+    ['GET',    '#^/admin/suggestions$#',                 'admin_suggestions.php'],
+    ['POST',   '#^/admin/suggestions/([A-Z0-9]{26})/status$#', 'admin_suggestions.php'],
+
     // Extension API (Bearer authed, returns JSON, CORS).
     ['GET',    '#^/api/v1/video-reviews$#',                               'api_v1_reviews.php'],
     ['POST',   '#^/api/v1/video-reviews$#',                               'api_v1_reviews.php'],

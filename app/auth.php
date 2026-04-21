@@ -62,6 +62,24 @@ function sign_in_user(string $userId): void {
     $_SESSION['user_id'] = $userId;
 }
 
+function is_admin(?array $user): bool {
+    if (!$user) return false;
+    $adminEmail = env('ADMIN_EMAIL');
+    if (!$adminEmail) return false;
+    return strcasecmp((string) $user['email'], $adminEmail) === 0;
+}
+
+function require_admin(): array {
+    $user = current_user();
+    if (!is_admin($user)) {
+        http_response_code(404);
+        header('Content-Type: text/plain; charset=utf-8');
+        echo "Not found.\n";
+        exit;
+    }
+    return $user;
+}
+
 function sign_out(): void {
     start_session();
     $_SESSION = [];

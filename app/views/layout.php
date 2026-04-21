@@ -37,6 +37,10 @@ $__cssV = is_file($__cssPath) ? filemtime($__cssPath) : 1;
       <a href="/video-reviews">Reviews</a>
       <a href="/extension">Extension</a>
       <a href="/settings/api-tokens">Settings</a>
+      <a href="/feedback">Feedback</a>
+      <?php if (is_admin($user)): ?>
+        <a href="/admin/suggestions" style="color:var(--accent);">Admin</a>
+      <?php endif; ?>
       <form method="post" action="/signout">
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
         <button type="submit" class="btn ghost sm">Sign out</button>
@@ -59,6 +63,7 @@ $__cssV = is_file($__cssPath) ? filemtime($__cssPath) : 1;
     <div><span class="mono">Marginama</span> · <span class="muted">Time-stamped video critiques.</span></div>
     <div class="links">
       <a href="/extension">Install extension</a>
+      <?php if ($user): ?><a href="/feedback">Feedback</a><?php endif; ?>
       <a href="https://github.com/jasonhuber/marginama" target="_blank" rel="noopener">GitHub</a>
       <span class="muted">MIT · <?= (int) date('Y') ?></span>
     </div>

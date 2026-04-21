@@ -17,7 +17,8 @@ $bodyClass = $bodyClass ?? '';
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/app.css">
+<?php $__cssPath = __DIR__ . '/../../public_html/assets/app.css'; $__cssV = is_file($__cssPath) ? filemtime($__cssPath) : 1; ?>
+<link rel="stylesheet" href="/assets/app.css?v=<?= (int) $__cssV ?>">
 </head>
 <body<?= $bodyClass ? ' class="' . e($bodyClass) . '"' : '' ?>>
 <header class="site">

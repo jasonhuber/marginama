@@ -104,13 +104,17 @@
     <style>
       :host, * { box-sizing: border-box; }
       .panel {
-        font: 13px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font: 13px/1.45 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        letter-spacing: -0.005em;
         width: 340px;
-        background: #ffffff;
-        color: #111827;
-        border: 1px solid #e5e7eb;
+        background: #111114;
+        color: #ededed;
+        border: 1px solid #1f1f23;
         border-radius: 10px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.05);
+        box-shadow:
+          0 1px 0 rgba(255,255,255,0.03) inset,
+          0 20px 50px -10px rgba(0,0,0,0.6),
+          0 10px 25px rgba(0,0,0,0.4);
         overflow: hidden;
       }
       .panel.collapsed .body { display: none; }
@@ -119,35 +123,48 @@
         align-items: center;
         gap: 8px;
         padding: 10px 12px;
-        background: #f9fafb;
-        border-bottom: 1px solid #e5e7eb;
+        background: #0c0c0f;
+        border-bottom: 1px solid #1f1f23;
         cursor: grab;
         user-select: none;
+      }
+      .mark {
+        width: 18px; height: 18px;
+        display: inline-flex; align-items: center; justify-content: center;
+        background: #111114; color: #ededed;
+        border: 1px solid #1f1f23; border-radius: 4px;
+        font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+        font-size: 10px; font-weight: 500;
       }
       .title {
         flex: 1;
         font-weight: 600;
-        color: #111827;
+        color: #fafafa;
         font-size: 12px;
+        letter-spacing: -0.01em;
       }
       .dot {
-        width: 8px; height: 8px; border-radius: 50%;
-        background: #9ca3af;
+        width: 7px; height: 7px; border-radius: 50%;
+        background: #52525b;
       }
-      .dot.ok { background: #10b981; }
-      .dot.warn { background: #f59e0b; }
-      .dot.err { background: #ef4444; }
+      .dot.ok {
+        background: #06b6d4;
+        box-shadow: 0 0 0 3px rgba(6,182,212,0.18);
+      }
+      .dot.warn { background: #fbbf24; }
+      .dot.err { background: #f87171; }
       .icon-btn {
         background: transparent;
         border: 0;
         padding: 2px 6px;
         cursor: pointer;
-        color: #6b7280;
+        color: #71717a;
         font-size: 14px;
         line-height: 1;
         border-radius: 4px;
+        transition: background-color 120ms, color 120ms;
       }
-      .icon-btn:hover { background: #e5e7eb; color: #111827; }
+      .icon-btn:hover { background: #1f1f23; color: #ededed; }
       .body { padding: 10px 12px; }
       .ts-row {
         display: flex;
@@ -156,38 +173,45 @@
         margin-bottom: 8px;
       }
       .ts-badge {
-        background: #111827;
-        color: #ffffff;
+        background: #0c0c0f;
+        color: #06b6d4;
         padding: 3px 8px;
+        border: 1px solid #1f1f23;
         border-radius: 6px;
         font-variant-numeric: tabular-nums;
-        font-family: ui-monospace, "SF Mono", Menlo, monospace;
+        font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
         font-size: 12px;
+        letter-spacing: 0.01em;
       }
       .ts-row button {
+        font: inherit;
         font-size: 11px;
         padding: 3px 8px;
-        background: #f3f4f6;
-        border: 1px solid #e5e7eb;
-        color: #374151;
+        background: #111114;
+        border: 1px solid #1f1f23;
+        color: #a1a1aa;
         border-radius: 6px;
         cursor: pointer;
+        transition: border-color 120ms, color 120ms;
       }
-      .ts-row button:hover { background: #e5e7eb; }
+      .ts-row button:hover { border-color: #3f3f46; color: #ededed; }
       textarea {
         width: 100%;
         min-height: 70px;
         resize: vertical;
         padding: 8px 10px;
-        border: 1px solid #d1d5db;
+        background: #0c0c0f;
+        border: 1px solid #1f1f23;
         border-radius: 6px;
         font: inherit;
-        color: #111827;
+        color: #ededed;
+        transition: border-color 120ms, box-shadow 120ms;
       }
+      textarea::placeholder { color: #52525b; }
       textarea:focus {
         outline: none;
-        border-color: #2563eb;
-        box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+        border-color: #06b6d4;
+        box-shadow: 0 0 0 3px rgba(6,182,212,0.22);
       }
       .actions {
         display: flex;
@@ -202,139 +226,159 @@
         border-radius: 6px;
         cursor: pointer;
         border: 1px solid transparent;
+        font: inherit;
+        font-weight: 500;
+        transition: background-color 120ms, border-color 120ms, color 120ms;
       }
       .primary {
-        background: #2563eb;
-        color: #ffffff;
+        background: #06b6d4;
+        color: #04181d;
+        font-weight: 600;
       }
-      .primary:hover { background: #1d4ed8; }
-      .primary:disabled { background: #9ca3af; cursor: not-allowed; }
+      .primary:hover { background: #22c8dc; }
+      .primary:disabled { background: #27272a; color: #52525b; cursor: not-allowed; }
       .secondary {
-        background: #ffffff;
-        color: #374151;
-        border-color: #d1d5db;
+        background: #111114;
+        color: #a1a1aa;
+        border-color: #1f1f23;
       }
-      .secondary:hover { background: #f9fafb; }
+      .secondary:hover { border-color: #3f3f46; color: #ededed; }
       .status {
         margin-top: 6px;
         font-size: 11px;
-        color: #6b7280;
+        color: #71717a;
         min-height: 14px;
       }
-      .status.err { color: #b91c1c; }
-      .status.ok { color: #047857; }
+      .status.err { color: #f87171; }
+      .status.ok { color: #06b6d4; }
       .list {
         margin-top: 12px;
         max-height: 280px;
         overflow-y: auto;
-        border-top: 1px solid #e5e7eb;
+        border-top: 1px solid #1f1f23;
         padding-top: 8px;
       }
+      .list::-webkit-scrollbar { width: 8px; }
+      .list::-webkit-scrollbar-track { background: transparent; }
+      .list::-webkit-scrollbar-thumb { background: #27272a; border-radius: 4px; }
       .list-empty {
         text-align: center;
-        color: #9ca3af;
+        color: #52525b;
         font-size: 11px;
         padding: 12px 0;
+        font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
       }
       .note {
-        padding: 6px 4px;
-        border-bottom: 1px solid #f3f4f6;
+        padding: 7px 4px;
+        border-bottom: 1px dashed #1f1f23;
         display: flex;
         gap: 8px;
         align-items: flex-start;
       }
       .note:last-child { border-bottom: none; }
       .note .jump {
-        background: #111827;
-        color: #ffffff;
-        border: 0;
+        background: #0c0c0f;
+        color: #06b6d4;
+        border: 1px solid #1f1f23;
         padding: 2px 6px;
         border-radius: 4px;
-        font-family: ui-monospace, "SF Mono", Menlo, monospace;
+        font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
         font-size: 11px;
         cursor: pointer;
+        transition: border-color 120ms;
       }
-      .note .jump:hover { background: #000000; }
+      .note .jump:hover { border-color: rgba(6,182,212,0.4); }
       .note .text {
         flex: 1;
         font-size: 12px;
-        color: #1f2937;
+        color: #ededed;
         white-space: pre-wrap;
         word-break: break-word;
+        line-height: 1.5;
       }
       .note .del {
         background: transparent;
         border: 0;
-        color: #9ca3af;
+        color: #52525b;
         cursor: pointer;
         font-size: 11px;
+        padding: 0 2px;
+        transition: color 120ms;
       }
-      .note .del:hover { color: #b91c1c; }
+      .note .del:hover { color: #f87171; }
       .config-hint {
-        background: #fef3c7;
-        border: 1px solid #fde68a;
+        background: rgba(6,182,212,0.08);
+        border: 1px solid rgba(6,182,212,0.32);
         padding: 8px 10px;
         border-radius: 6px;
         font-size: 11px;
-        color: #92400e;
+        color: #67e8f9;
         margin-bottom: 8px;
       }
-      .config-hint a { color: #92400e; text-decoration: underline; }
+      .config-hint a { color: #06b6d4; text-decoration: underline; }
       .overlay-toggle {
         display: flex;
         align-items: center;
         gap: 6px;
         margin-bottom: 10px;
         padding: 6px 8px;
-        background: #f3f4f6;
+        background: #0c0c0f;
+        border: 1px solid #1f1f23;
         border-radius: 6px;
         font-size: 11px;
-        color: #374151;
+        color: #a1a1aa;
         cursor: pointer;
+        transition: border-color 120ms;
       }
-      .overlay-toggle:hover { background: #e5e7eb; }
-      .overlay-toggle input { margin: 0; cursor: pointer; }
+      .overlay-toggle:hover { border-color: #3f3f46; }
+      .overlay-toggle input { margin: 0; cursor: pointer; accent-color: #06b6d4; }
       .reviewer-picker {
         display: flex;
         align-items: center;
         gap: 6px;
         margin-bottom: 10px;
         font-size: 11px;
-        color: #374151;
+        color: #a1a1aa;
       }
       .reviewer-picker label {
-        color: #6b7280;
+        color: #71717a;
         white-space: nowrap;
+        font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+        font-size: 10px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
       }
       .reviewer-picker select {
         flex: 1;
         padding: 5px 8px;
-        border: 1px solid #d1d5db;
+        border: 1px solid #1f1f23;
         border-radius: 6px;
-        background: #ffffff;
+        background: #0c0c0f;
         font: inherit;
-        color: #111827;
+        color: #ededed;
         cursor: pointer;
+        transition: border-color 120ms;
       }
       .reviewer-picker select:focus {
         outline: none;
-        border-color: #2563eb;
+        border-color: #06b6d4;
       }
       .readonly-banner {
         padding: 6px 10px;
-        background: #fef3c7;
-        border: 1px solid #fde68a;
+        background: rgba(6,182,212,0.08);
+        border: 1px solid rgba(6,182,212,0.32);
         border-radius: 6px;
         font-size: 11px;
-        color: #92400e;
+        color: #67e8f9;
         margin-bottom: 10px;
       }
       .composer[hidden] { display: none !important; }
     </style>
     <div class="panel" id="panel">
       <div class="header" id="drag">
-        <span class="dot" id="statusDot"></span>
+        <span class="mark" aria-hidden="true">§</span>
         <span class="title">Marginama</span>
+        <span class="dot" id="statusDot"></span>
         <button class="icon-btn" id="refreshBtn" title="Refresh">↻</button>
         <button class="icon-btn" id="toggleBtn" title="Collapse">–</button>
       </div>

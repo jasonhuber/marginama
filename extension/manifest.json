@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Marginama Video Review",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Capture time-stamped critiques from YouTube, Sybill, and Google Drive videos, and send them to Marginama.",
   "permissions": ["storage", "activeTab"],
   "host_permissions": [

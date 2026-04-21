@@ -1,0 +1,57 @@
+{
+  "manifest_version": 3,
+  "name": "Marginama Video Review",
+  "version": "0.1.0",
+  "description": "Capture time-stamped critiques from YouTube, Sybill, and Google Drive videos, and send them to Marginama.",
+  "permissions": ["storage", "activeTab"],
+  "host_permissions": [
+    "https://marginama.com/*",
+    "https://www.marginama.com/*",
+    "http://localhost:8000/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.youtube.com/*",
+        "https://youtube.com/*",
+        "https://m.youtube.com/*",
+        "https://*.sybill.ai/*",
+        "https://drive.google.com/*"
+      ],
+      "js": ["content.js"],
+      "css": ["sidebar.css"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "action": {
+    "default_title": "Marginama Video Review",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "commands": {
+    "add-critique": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+N",
+        "mac": "Command+Shift+N"
+      },
+      "description": "Capture the current video timestamp and focus the note field"
+    }
+  }
+}

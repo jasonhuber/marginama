@@ -1,0 +1,21 @@
+Options -Indexes
+
+RewriteEngine On
+
+# Send everything that isn't an actual file or directory to index.php,
+# preserving the original URI in the QUERY_STRING so the router can read it.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+# Security headers (safe defaults; adjust CSP once pages have their own needs).
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Block direct access to dotfiles if any ever end up here.
+<FilesMatch "^\.">
+  Require all denied
+</FilesMatch>

@@ -1,0 +1,3 @@
+/* Shadow-DOM isolates the sidebar from page styles; this file is kept empty
+   on purpose so the manifest has something to list if we ever want global
+   styles. All real styles live inside content.js's shadow root. */

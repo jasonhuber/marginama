@@ -196,6 +196,14 @@ ob_start(); ?>
         <summary>Can my team share critiques with each other?</summary>
         <p>Yes. Every review can be published as a read-only share link. Anyone with the link can read the notes and click through to timestamps. Links are revocable at any time, so a project that ends stays ended.</p>
       </details>
+      <details>
+        <summary>What if the extension can't detect my video?</summary>
+        <p>Some players (Gong, Zoom cloud recordings, enterprise DRM videos) keep the video element behind cross-origin iframes the extension can't reach. In that case, flip the <strong>Manual timer</strong> toggle in the sidebar. Click <strong>▶ Start</strong> the moment you hit play on the video and the sidebar runs its own stopwatch. Press <kbd>⌘</kbd>+<kbd>⇧</kbd>+<kbd>N</kbd> to capture the elapsed time with your note. The only tradeoff: clicking timestamps on the dashboard opens the video URL but can't jump you to that exact second — you seek manually.</p>
+      </details>
+      <details>
+        <summary>My video platform isn't supported. What now?</summary>
+        <p>Two options. One: use <strong>Manual timer</strong> mode — it works on any web page with any player. Two: upload the recording to YouTube as <em>unlisted</em> or <em>private</em> (no need to make it public), share the link with your reviewer, and Marginama works exactly like it would on any public YouTube video. The video stays gated by YouTube's access controls; only the link holders can watch.</p>
+      </details>
     </div>
   </div>
 </section>

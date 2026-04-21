@@ -52,6 +52,25 @@ To add a note:
 Notes appear in the list below, sorted by timestamp. Click any timestamp to
 seek the video there. Click ✕ to delete.
 
+## Manual timer (for players we can't reach)
+
+Some video players (Gong, Zoom cloud recordings, enterprise DRM videos) keep
+the underlying `<video>` element behind cross-origin iframes or sandboxing. The
+extension can't read or seek them. For those, flip the **Manual timer** toggle
+in the sidebar:
+
+1. Click **▶ Start** the instant you hit play on the video.
+2. The badge ticks up as your stopwatch.
+3. Press **Cmd+Shift+N** (or click **⟳ Now**) to capture the current elapsed
+   time with your note. Save as normal.
+
+Tradeoff: the dashboard's click-to-seek won't work for these notes — clicking
+a timestamp opens the source URL but can't jump to that second (because the
+extension never had control of the player). You seek manually.
+
+If the extension hasn't found a video three seconds after page load, the
+sidebar shows a small hint prompting you to try manual mode.
+
 ## Files
 
 | File             | Purpose                                                       |

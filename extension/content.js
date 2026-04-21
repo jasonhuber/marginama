@@ -5,6 +5,24 @@
   if (window.__SOCRATES_VIDEO_REVIEW_INJECTED__) return;
   window.__SOCRATES_VIDEO_REVIEW_INJECTED__ = true;
 
+  // ── Manual timer state ───────────────────────────────────────────────────
+  // Used when the host page's <video> is unreachable — cross-origin iframes,
+  // heavy DRM players like Gong, protected Zoom recordings. The user clicks
+  // Start when they hit play on the video; the sidebar runs its own
+  // stopwatch. Seek is disabled in this mode (we don't control the video).
+  let manualMode = false;
+  let manualStartedAt = null;      // Date.now() when running, null otherwise
+  let manualAccumulatedMs = 0;     // total elapsed across start/pause cycles
+  let manualTicker = null;
+
+  function manualElapsedMs() {
+    if (manualStartedAt === null) return manualAccumulatedMs;
+    return manualAccumulatedMs + (Date.now() - manualStartedAt);
+  }
+  function manualElapsedSec() {
+    return Math.floor(manualElapsedMs() / 1000);
+  }
+
   // ── Utilities ──────────────────────────────────────────────────────────────
 
   /**
@@ -62,11 +80,13 @@
   }
 
   function currentTimestamp() {
+    if (manualMode) return manualElapsedSec();
     const v = findVideo();
     return v ? v.currentTime : 0;
   }
 
   function seekTo(seconds) {
+    if (manualMode) return; // we don't control the video in manual mode
     const v = findVideo();
     if (v) {
       v.currentTime = seconds;
@@ -332,6 +352,56 @@
       }
       .overlay-toggle:hover { border-color: #3f3f46; }
       .overlay-toggle input { margin: 0; cursor: pointer; accent-color: #06b6d4; }
+      .manual-toggle {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 8px;
+        padding: 6px 8px;
+        background: #0c0c0f;
+        border: 1px solid #1f1f23;
+        border-radius: 6px;
+        font-size: 11px;
+        color: #a1a1aa;
+        cursor: pointer;
+        transition: border-color 120ms;
+      }
+      .manual-toggle:hover { border-color: #3f3f46; }
+      .manual-toggle input { margin: 0; cursor: pointer; accent-color: #06b6d4; }
+      .manual-hint {
+        padding: 6px 10px;
+        font-size: 10.5px;
+        font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+        color: #67e8f9;
+        background: rgba(6,182,212,0.08);
+        border: 1px dashed rgba(6,182,212,0.32);
+        border-radius: 6px;
+        margin-bottom: 8px;
+        display: none;
+      }
+      .manual-row {
+        display: none;
+        gap: 6px;
+        margin-bottom: 8px;
+      }
+      .manual-row button {
+        font: inherit;
+        font-size: 11px;
+        padding: 4px 10px;
+        background: #111114;
+        border: 1px solid #1f1f23;
+        color: #a1a1aa;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: border-color 120ms, color 120ms, background 120ms;
+      }
+      .manual-row button:hover { border-color: #3f3f46; color: #ededed; }
+      .manual-row button.accent {
+        background: rgba(6,182,212,0.12);
+        border-color: rgba(6,182,212,0.4);
+        color: #06b6d4;
+      }
+      .panel.manual #seekBtn { opacity: 0.45; pointer-events: none; }
       .reviewer-picker {
         display: flex;
         align-items: center;
@@ -398,11 +468,23 @@
           <input type="checkbox" id="overlayToggle" />
           <span>Show notes as overlay on video</span>
         </label>
+        <label class="manual-toggle">
+          <input type="checkbox" id="manualModeToggle" />
+          <span>Manual timer (use when video isn't detected)</span>
+        </label>
+        <div class="manual-hint" id="manualHint">
+          No video detected on this page. Try Manual timer.
+        </div>
         <div class="composer" id="composer">
           <div class="ts-row">
             <span class="ts-badge" id="tsBadge">0:00</span>
             <button id="captureBtn" title="Set to current video time">⟳ Now</button>
             <button id="seekBtn" title="Seek to captured time">▸ Seek</button>
+          </div>
+          <div class="manual-row" id="manualRow">
+            <button id="startBtn" class="accent" title="Click when you hit play on the video">▶ Start</button>
+            <button id="pauseBtn" style="display:none;" title="Pause the stopwatch">⏸ Pause</button>
+            <button id="resetBtn" title="Reset to 0:00">↺</button>
           </div>
           <textarea id="noteInput" placeholder="Critique this moment…"></textarea>
           <div class="actions">
@@ -897,6 +979,84 @@
       setOverlayEnabled(true);
     }
   });
+
+  // ── Manual timer wiring ───────────────────────────────────────────────────
+  const manualToggle = $("#manualModeToggle");
+  const manualHint = $("#manualHint");
+  const manualRow = $("#manualRow");
+  const startBtn = $("#startBtn");
+  const pauseBtn = $("#pauseBtn");
+  const resetBtn = $("#resetBtn");
+  const seekBtn = $("#seekBtn");
+
+  function refreshManualBadge() {
+    if (manualMode) {
+      tsBadge.textContent = formatTimestamp(manualElapsedSec());
+    }
+  }
+  function startManualTicker() {
+    if (manualTicker) return;
+    manualTicker = setInterval(refreshManualBadge, 250);
+  }
+  function stopManualTicker() {
+    if (manualTicker) {
+      clearInterval(manualTicker);
+      manualTicker = null;
+    }
+  }
+  function manualStart() {
+    if (manualStartedAt !== null) return;
+    manualStartedAt = Date.now();
+    startBtn.style.display = "none";
+    pauseBtn.style.display = "";
+    startManualTicker();
+    refreshManualBadge();
+  }
+  function manualPause() {
+    if (manualStartedAt === null) return;
+    manualAccumulatedMs += Date.now() - manualStartedAt;
+    manualStartedAt = null;
+    startBtn.style.display = "";
+    pauseBtn.style.display = "none";
+    stopManualTicker();
+    refreshManualBadge();
+  }
+  function manualReset() {
+    manualAccumulatedMs = 0;
+    manualStartedAt = null;
+    startBtn.style.display = "";
+    pauseBtn.style.display = "none";
+    stopManualTicker();
+    refreshManualBadge();
+  }
+  function setManualMode(on) {
+    manualMode = on;
+    manualRow.style.display = on ? "flex" : "none";
+    panel.classList.toggle("manual", on);
+    if (on) {
+      manualHint.style.display = "none";
+      refreshManualBadge();
+    } else {
+      stopManualTicker();
+      tsBadge.textContent = formatTimestamp(capturedTs);
+    }
+  }
+
+  manualToggle.addEventListener("change", () => {
+    setManualMode(manualToggle.checked);
+  });
+  startBtn.addEventListener("click", manualStart);
+  pauseBtn.addEventListener("click", manualPause);
+  resetBtn.addEventListener("click", manualReset);
+
+  // Auto-suggest manual mode when no video is detected after a short delay.
+  // Host pages like Gong/Zoom/Stream hide their <video> behind DRM or
+  // cross-origin iframes — in which case we show a small nudge.
+  setTimeout(() => {
+    if (!manualMode && !findVideo()) {
+      manualHint.style.display = "block";
+    }
+  }, 3000);
 
   // Cmd/Ctrl+Enter to save from within the note field
   noteInput.addEventListener("keydown", (e) => {

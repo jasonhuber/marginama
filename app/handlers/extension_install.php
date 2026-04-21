@@ -43,11 +43,19 @@ ob_start(); ?>
     <div class="card elevated">
       <h3 style="margin-bottom:0.5rem;">Using it</h3>
       <p class="muted" style="margin:0 0 1rem;">
-        Open any YouTube, Sybill, or Google Drive video page. The floating Marginama
-        panel appears top-right. Press <kbd>⌘</kbd>+<kbd>⇧</kbd>+<kbd>N</kbd>
+        Open any supported video page — YouTube, Vimeo, Loom, Wistia, Sybill, Gong,
+        Zoom cloud recordings, Google Drive, and more. The floating Marginama panel
+        appears top-right. Press <kbd>⌘</kbd>+<kbd>⇧</kbd>+<kbd>N</kbd>
         (or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>N</kbd>) to capture the current
         timestamp, type the critique, and click <strong>Add note</strong>. Notes
         appear on <a href="/video-reviews">/video-reviews</a> sorted by timestamp.
+      </p>
+      <p class="muted" style="margin:0 0 1rem; font-size:0.9rem;">
+        <strong style="color:var(--fg-0);">Video not auto-detected?</strong>
+        Some players (Gong, Zoom, enterprise DRM) hide their video element from
+        extensions. Flip the <strong>Manual timer</strong> toggle in the sidebar —
+        click <strong>▶ Start</strong> when you hit play, and the sidebar runs its
+        own stopwatch. Seek-to-timestamp is the only thing you lose.
       </p>
       <p class="muted" style="margin:0; font-size:0.88rem;">
         The extension is MIT-licensed. Source on

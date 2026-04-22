@@ -8,18 +8,27 @@ Small by design: vanilla PHP 8.2, MySQL, zero Composer packages.
 
 ## Run locally
 
-Requires PHP 8.2+ and either MySQL 8 or Docker.
+Requires PHP 8.2+ and MySQL 8. On macOS:
 
 ```sh
-docker run --name marginama-mysql \
-  -e MYSQL_ROOT_PASSWORD=dev \
-  -e MYSQL_DATABASE=marginama \
-  -p 3306:3306 -d mysql:8
+brew install php mysql
+brew services start mysql
+
+# Create the database and a local user (one-time setup).
+mysql -u root <<'SQL'
+CREATE DATABASE IF NOT EXISTS marginama;
+CREATE USER IF NOT EXISTS 'marginama'@'localhost' IDENTIFIED BY 'dev';
+GRANT ALL PRIVILEGES ON marginama.* TO 'marginama'@'localhost';
+FLUSH PRIVILEGES;
+SQL
+
+mysql -u marginama -pdev marginama < schema.sql
 
 cp .env.example .env
-# edit .env: point DB_* at your MySQL, set SESSION_SECRET to a long random string
-
-mysql -h 127.0.0.1 -u root -pdev marginama < schema.sql
+# Edit .env:
+#   DB_USER=marginama
+#   DB_PASS=dev
+#   SESSION_SECRET=<long random string, e.g. php -r 'echo bin2hex(random_bytes(32));'>
 
 php -S localhost:8000 -t public_html
 ```

@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+require_once __DIR__ . '/../search.php';
+
 /** @var array $params */
 $user = require_session();
 require_csrf();
@@ -23,6 +25,12 @@ if (!$row) {
 if ($note !== '' && strlen($note) <= 4000) {
     $upd = db()->prepare('UPDATE video_critiques SET note = ? WHERE id = ?');
     $upd->execute([$note, $critiqueId]);
+    store_critique_embedding_best_effort(
+        $critiqueId,
+        $row['review_id'],
+        $user['id'],
+        ['note' => $note]
+    );
 }
 
 header('Location: /video-reviews/' . $row['review_id']);

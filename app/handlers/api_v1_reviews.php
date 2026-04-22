@@ -4,6 +4,8 @@ declare(strict_types=1);
 // GET  /api/v1/video-reviews  — list caller's reviews
 // POST /api/v1/video-reviews  — add critique (upserts the review)
 
+require_once __DIR__ . '/../search.php';
+
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 $auth = require_bearer();
 $userId = $auth['userId'];
@@ -104,6 +106,9 @@ if ($method === 'POST') {
     $crt = $pdo->prepare('SELECT id, timestamp_sec, note, created_at FROM video_critiques WHERE id = ?');
     $crt->execute([$critiqueId]);
     $critique = $crt->fetch();
+
+    store_review_embedding_best_effort($reviewId, $review);
+    store_critique_embedding_best_effort($critiqueId, $reviewId, $userId, $critique);
 
     json_response(201, [
         'review' => [

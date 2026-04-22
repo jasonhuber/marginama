@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+require_once __DIR__ . '/../tags.php';
+
 /** @var array $params */
 $user = require_session();
 $id = $params[0];
@@ -23,6 +25,9 @@ $cst = db()->prepare(
 );
 $cst->execute([$id]);
 $critiques = $cst->fetchAll();
+
+$tags = tags_for_review($id);
+$tagStr = implode(', ', array_map(fn($t) => $t['name'], $tags));
 
 $shareUrl = $review['share_token']
     ? app_url() . '/share/video-review/' . $review['share_token']
@@ -47,6 +52,31 @@ ob_start(); ?>
         </div>
       </div>
     </header>
+
+    <div class="card" style="margin-bottom:1rem;">
+      <form method="post" action="/video-reviews/<?= e($review['id']) ?>/tags">
+        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+        <label for="tags-input" style="display:block; font-size:0.9rem; margin-bottom:0.5rem; color:var(--fg-2);">Tags</label>
+        <div class="row">
+          <input id="tags-input" class="grow" type="text" name="tags"
+                 value="<?= e($tagStr) ?>"
+                 placeholder="alice, discovery, person:bob"
+                 autocomplete="off" maxlength="1200">
+          <button type="submit" class="btn sm">Save tags</button>
+        </div>
+        <?php if ($tags): ?>
+          <div class="row" style="margin-top:0.6rem; flex-wrap:wrap; gap:6px;">
+            <?php foreach ($tags as $t): ?>
+              <a class="chip" href="/video-reviews?tag=<?= e(urlencode($t['name'])) ?>"><?= e($t['name']) ?></a>
+            <?php endforeach; ?>
+          </div>
+        <?php else: ?>
+          <p class="muted" style="margin:0.5rem 0 0; font-size:0.85rem;">
+            Freeform, comma-separated. Convention: <code>person:alice</code>, <code>topic:discovery</code>.
+          </p>
+        <?php endif; ?>
+      </form>
+    </div>
 
     <div class="card" style="margin-bottom:1.5rem;">
       <form method="post" action="/video-reviews/<?= e($review['id']) ?>/share" class="row">

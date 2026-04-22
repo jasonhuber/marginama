@@ -78,3 +78,51 @@ CREATE TABLE IF NOT EXISTS suggestions (
   INDEX idx_sugg_created (created_at),
   INDEX idx_sugg_status (status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tags are per-user. `name` is freeform; users can encode kind as a prefix
+-- (e.g. "person:alice", "topic:discovery") — no schema-level kind column.
+CREATE TABLE IF NOT EXISTS tags (
+  id         CHAR(26)    NOT NULL PRIMARY KEY,
+  user_id    CHAR(26)    NOT NULL,
+  name       VARCHAR(64) NOT NULL,
+  created_at DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_tags_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  UNIQUE KEY uq_tags_user_name (user_id, name),
+  INDEX idx_tags_user (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS review_tags (
+  review_id CHAR(26) NOT NULL,
+  tag_id    CHAR(26) NOT NULL,
+  PRIMARY KEY (review_id, tag_id),
+  CONSTRAINT fk_rt_review FOREIGN KEY (review_id) REFERENCES video_reviews(id) ON DELETE CASCADE,
+  CONSTRAINT fk_rt_tag    FOREIGN KEY (tag_id)    REFERENCES tags(id)          ON DELETE CASCADE,
+  INDEX idx_rt_tag (tag_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Embeddings stored as JSON arrays of floats. No vector DB — for a single
+-- user's corpus (hundreds of notes) cosine similarity in PHP is trivial.
+-- `model` lets us migrate model versions later by clearing rows with the old
+-- label and re-embedding.
+CREATE TABLE IF NOT EXISTS review_embeddings (
+  review_id   CHAR(26)    NOT NULL PRIMARY KEY,
+  model       VARCHAR(64) NOT NULL,
+  embedding   JSON        NOT NULL,
+  source_hash CHAR(64)    NOT NULL,
+  embedded_at DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_rem_review FOREIGN KEY (review_id) REFERENCES video_reviews(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS critique_embeddings (
+  critique_id CHAR(26)    NOT NULL PRIMARY KEY,
+  review_id   CHAR(26)    NOT NULL,
+  user_id     CHAR(26)    NOT NULL,
+  model       VARCHAR(64) NOT NULL,
+  embedding   JSON        NOT NULL,
+  source_hash CHAR(64)    NOT NULL,
+  embedded_at DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_cem_critique FOREIGN KEY (critique_id) REFERENCES video_critiques(id) ON DELETE CASCADE,
+  CONSTRAINT fk_cem_review   FOREIGN KEY (review_id)   REFERENCES video_reviews(id)   ON DELETE CASCADE,
+  CONSTRAINT fk_cem_user     FOREIGN KEY (user_id)     REFERENCES users(id)           ON DELETE CASCADE,
+  INDEX idx_cem_user (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

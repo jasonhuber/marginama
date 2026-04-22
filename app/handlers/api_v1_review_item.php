@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 // GET/PATCH/DELETE /api/v1/video-reviews/:id
 
+require_once __DIR__ . '/../search.php';
+
 /** @var array $params */
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 $auth = require_bearer();
@@ -37,6 +39,8 @@ if ($method === 'PATCH') {
     $pdo->prepare('UPDATE video_reviews SET video_title = ? WHERE id = ?')
         ->execute([$videoTitle, $id]);
     $review['video_title'] = $videoTitle;
+
+    store_review_embedding_best_effort($id, $review);
 }
 
 // GET and post-PATCH response: include critiques.

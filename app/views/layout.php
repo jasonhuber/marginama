@@ -42,6 +42,7 @@ if (!str_starts_with($__path, '/admin') && !str_starts_with($__path, '/api/')) {
     <nav aria-label="Primary">
     <?php if ($user): ?>
       <a href="/video-reviews">Reviews</a>
+      <a href="/search">Search</a>
       <a href="/extension">Extension</a>
       <a href="/settings/api-tokens">Tokens</a>
       <a href="/settings/account">Account</a>

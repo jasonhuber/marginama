@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 // PATCH/DELETE /api/v1/video-reviews/critiques/:id
 
+require_once __DIR__ . '/../search.php';
+
 /** @var array $params */
 $method = $_SERVER['REQUEST_METHOD'] ?? 'PATCH';
 $auth = require_bearer();
@@ -55,9 +57,16 @@ if ($method === 'PATCH') {
     $pdo->prepare('UPDATE video_critiques SET ' . implode(', ', $sets) . ' WHERE id = ?')
         ->execute($vals);
 
+    $reviewId = (string) $critique['review_id'];
     $re = $pdo->prepare('SELECT id, timestamp_sec, note, created_at, updated_at FROM video_critiques WHERE id = ?');
     $re->execute([$id]);
     $critique = $re->fetch();
+
+    // Only embed when the note text itself changed — timestamp-only edits don't
+    // need a new vector.
+    if ($note !== null) {
+        store_critique_embedding_best_effort($id, $reviewId, $userId, $critique);
+    }
 
     json_response(200, ['critique' => [
         'id'           => $critique['id'],

@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Marginama Video Review",
   "version": "0.4.0",
-  "description": "Capture time-stamped critiques from video pages (YouTube, Vimeo, Loom, Sybill, Gong, Zoom, Drive, and more) and send them to Marginama.",
+  "description": "Capture time-stamped critiques from video pages (YouTube, Vimeo, Loom, Sybill, Gong, Salesloft, Zoom, Drive, and more) and send them to Marginama.",
   "permissions": ["storage", "activeTab"],
   "host_permissions": [
     "https://marginama.com/*",
@@ -27,6 +27,7 @@
         "https://*.wistia.com/*",
         "https://*.wistia.net/*",
         "https://*.app.gong.io/*",
+        "https://app.salesloft.com/*",
         "https://*.zoom.us/rec/*",
         "https://*.zoom.com/rec/*",
         "https://chorus.ai/*",

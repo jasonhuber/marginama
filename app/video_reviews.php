@@ -9,8 +9,8 @@ declare(strict_types=1);
  * single review row.
  *
  * Supported providers (see provider_label() for display names):
- *   youtube · sybill · gdrive · vimeo · loom · wistia · gong · zoom
- *   chorus · panopto · riverside · descript · twitch · msstream · other
+ *   youtube · sybill · gdrive · vimeo · loom · wistia · gong · salesloft
+ *   zoom · chorus · panopto · riverside · descript · twitch · msstream · other
  */
 function canonicalize_video_url(string $input): array {
     $parts = parse_url($input);
@@ -90,6 +90,13 @@ function canonicalize_video_url(string $input): array {
         return ["$scheme://{$parts['host']}$path", 'gong'];
     }
 
+    // ── Salesloft Conversations ──────────────────────────────────────────────
+    // app.salesloft.com/... — recording id lives in the pathname; drop query
+    // and fragment so share-link tracking doesn't fragment the review.
+    if ($host === 'app.salesloft.com' || str_ends_with($host, '.salesloft.com')) {
+        return ["$scheme://{$parts['host']}$path", 'salesloft'];
+    }
+
     // ── Zoom Cloud Recordings ────────────────────────────────────────────────
     // zoom.us/rec/share/HASH?pwd=... — drop the password + tracking.
     if (str_ends_with($host, 'zoom.us') || str_ends_with($host, 'zoom.com')) {
@@ -151,6 +158,7 @@ function provider_label(?string $provider): string {
         'loom'      => 'Loom',
         'wistia'    => 'Wistia',
         'gong'      => 'Gong',
+        'salesloft' => 'Salesloft',
         'zoom'      => 'Zoom',
         'chorus'    => 'Chorus',
         'panopto'   => 'Panopto',
@@ -199,7 +207,7 @@ function deep_link_at_time(string $canonicalUrl, string $provider, int $timestam
             return "$canonicalUrl{$sep}st={$t}";
     }
     // Providers that don't support deep-link seeking (Sybill, Drive, Gong,
-    // Zoom, Chorus, Riverside, Descript) just return the canonical URL.
+    // Salesloft, Zoom, Chorus, Riverside, Descript) just return the canonical URL.
     return $canonicalUrl;
 }
 

@@ -33,6 +33,7 @@ top-right. Supported platforms:
 | Wistia             | `wistia.com/medias/ID`, `fast.wistia.net/embed/iframe/ID`   |
 | Sybill             | `*.sybill.ai/*`                                             |
 | Gong               | `*.app.gong.io/*`                                           |
+| Salesloft          | `app.salesloft.com/*` (Conversations recordings)            |
 | Zoom               | `*.zoom.us/rec/*` (cloud recordings)                        |
 | Chorus             | `chorus.ai/*`                                               |
 | Panopto            | `*.panopto.com/*`, `*.panopto.eu/*`                         |

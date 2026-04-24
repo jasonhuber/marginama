@@ -50,6 +50,16 @@ ob_start(); ?>
           <span>·</span>
           <span><?= count($critiques) ?> <?= count($critiques) === 1 ? 'note' : 'notes' ?></span>
         </div>
+        <details style="margin-top:0.6rem;">
+          <summary style="cursor:pointer; color:var(--dim); font-size:0.82rem; font-family:var(--font-mono);">Rename</summary>
+          <form method="post" action="/video-reviews/<?= e($review['id']) ?>/title" class="row" style="margin-top:0.5rem;">
+            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+            <input class="grow" type="text" name="video_title"
+                   value="<?= e($review['video_title'] ?? '') ?>"
+                   placeholder="Meeting title" maxlength="500" autocomplete="off">
+            <button type="submit" class="btn sm">Save title</button>
+          </form>
+        </details>
       </div>
     </header>
 

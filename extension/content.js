@@ -94,11 +94,60 @@
     }
   }
 
+  // Zoom's <title> is always the generic product name
+  // ("Zoom | Video Conferencing, Web Conferencing, Webinars, Screen Sharing")
+  // regardless of the actual meeting topic, so we match on the distinctive
+  // tail and strip it before falling through to other sources.
+  const GENERIC_ZOOM_TITLE_RE =
+    /video conferencing,?\s*web conferencing,?\s*webinars?,?\s*screen sharing/i;
+
+  function isGenericTitle(s) {
+    return !s || GENERIC_ZOOM_TITLE_RE.test(s);
+  }
+
+  function findZoomMeetingTitle() {
+    // Zoom markup has drifted over the years; try the selectors we've seen
+    // in the wild, largest-specific → most-generic, and keep the first hit
+    // that looks like a real topic.
+    const selectors = [
+      ".r-title",
+      ".r_title",
+      "#r-title",
+      ".topic-text",
+      ".topic",
+      ".r-topic",
+      ".r-main-item__title",
+      ".recording-topic",
+      ".recording-title",
+      '[class*="recordingTopic"]',
+      '[class*="recording-topic"]',
+      '[class*="meetingTopic"]',
+      '[class*="meeting-topic"]',
+      "h1",
+    ];
+    for (const sel of selectors) {
+      let el;
+      try { el = document.querySelector(sel); } catch { continue; }
+      const text = el?.textContent?.trim();
+      if (text && text.length >= 2 && text.length <= 300 && !isGenericTitle(text)) {
+        return text;
+      }
+    }
+    return null;
+  }
+
   function getPageTitle() {
-    // Try og:title, then <title>, then pathname
+    const host = location.hostname || "";
+    if (/(^|\.)zoom\.(us|com)$/i.test(host)) {
+      const t = findZoomMeetingTitle();
+      if (t) return t;
+    }
     const og = document.querySelector('meta[property="og:title"]');
-    if (og?.content) return og.content;
-    if (document.title) return document.title;
+    const ogContent = og?.content?.trim();
+    if (ogContent && !isGenericTitle(ogContent)) return ogContent;
+    const docTitle = document.title?.trim();
+    if (docTitle && !isGenericTitle(docTitle)) return docTitle;
+    // Last resort: a URL-derived title beats the Zoom product name.
     return location.pathname;
   }
 

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Marginama Video Review",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Capture time-stamped critiques from video pages (YouTube, Vimeo, Loom, Sybill, Gong, Salesloft, Zoom, Drive, and more) and send them to Marginama.",
   "permissions": ["storage", "activeTab"],
   "host_permissions": [

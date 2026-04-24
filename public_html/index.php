@@ -37,6 +37,7 @@ $routes = [
     ['POST',   '#^/video-reviews/([A-Z0-9]{26})/delete$#', 'reviews_delete.php'],
     ['POST',   '#^/video-reviews/([A-Z0-9]{26})/share$#',  'reviews_share.php'],
     ['POST',   '#^/video-reviews/([A-Z0-9]{26})/tags$#',   'tags_update.php'],
+    ['POST',   '#^/video-reviews/([A-Z0-9]{26})/title$#',  'title_update.php'],
     ['GET',    '#^/video-reviews/([A-Z0-9]{26})/export$#', 'reviews_export.php'],
     ['POST',   '#^/video-reviews/critiques/([A-Z0-9]{26})/delete$#', 'critiques_delete.php'],
     ['POST',   '#^/video-reviews/critiques/([A-Z0-9]{26})/edit$#',   'critiques_edit.php'],
